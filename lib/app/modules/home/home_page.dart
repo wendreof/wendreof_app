@@ -1,6 +1,9 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'home_store.dart';
 
@@ -31,12 +34,33 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
 
   @override
   Widget build(BuildContext context) {
+    const double circleRadius = 100.0;
+    const double circleBorderWidth = 8.0;
+
+    void launchURL(String url) async {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(
+            Uri.parse(
+              url,
+            ),
+            mode: LaunchMode.externalApplication);
+      } else {
+        Fluttertoast.showToast(
+            msg:
+                'Não foi possível redirecionar para a loja. Por favor, faça a atualização manualmente.',
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.grey);
+      }
+    }
+
     return Scaffold(
       body: Container(
         color: Colors.purple,
         child: StatefulBuilder(builder: (context, setState) {
           return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.8,
@@ -50,115 +74,137 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                   },
                   children: <Widget>[
                     SingleChildScrollView(
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                          const SizedBox(
-                            height: 20,
+                      child: Stack(
+                        alignment: Alignment.topCenter,
+                        children: <Widget>[
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: circleRadius / 2.0),
+                            child: Container(
+                              //replace this Container with your Card
+                              color: Colors.white,
+                              height: 500.0,
+                            ),
                           ),
-                          Image.asset(
-                            'assets/images/wendreo.png',
-                            width: 100,
-                          ),
-                          const Text(
-                            'Wendreo Fernandes\nSoftware Developer',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          Column(
                             children: [
-                              Expanded(
-                                child: Card(
-                                  color: Colors.white,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: RichText(
-                                        textAlign: TextAlign.justify,
-                                        text: TextSpan(
-                                            text: 'About me',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary,
-                                                fontWeight: FontWeight.bold),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                  text:
-                                                      "\n\nI'm a software developer with +6 years of experience building software.",
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: Colors.grey[800],
-                                                  )),
-                                              TextSpan(
-                                                  text: "\n\nExpertise with:"
-                                                      "\n-DevOps: Fastlane, Pipeline CI/CD, Docker, Portainer, GitHub Actions, GitLab CI, Git Hooks and deployment",
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: Colors.grey[800],
-                                                  )),
-                                              TextSpan(
-                                                  text:
-                                                      "\n-Code Quality: Testing, SonarQube and CodeCov",
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: Colors.grey[800],
-                                                  )),
-                                              TextSpan(
-                                                  text:
-                                                      "\n-Techs: Git, Flutter, SQL, C# (.NET Core/.NET 6.0, Web API and Worker Service) and VB.NET (.NET Framework and Windows Forms) and Scrum",
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: Colors.grey[800],
-                                                  )),
-                                              TextSpan(
-                                                  text:
-                                                      "\n-Databases: SQL Server, Firebird, MySQL, SQLite and others",
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: Colors.grey[800],
-                                                  ))
-                                            ])),
-                                  ),
-                                ),
-                              ),
-                              // Expanded(
-                              //   child: Card(
-                              //     child: Padding(
-                              //       padding: EdgeInsets.all(8.0),
-                              //       child: RichText(
-                              //           textAlign: TextAlign.center,
-                              //           text: TextSpan(
-                              //               text: "dsadsadsad",
-                              //               style: TextStyle(
-                              //                   fontSize: 18,
-                              //                   color: Theme.of(context)
-                              //                       .accentColor,
-                              //                   fontWeight: FontWeight.bold),
-                              //               children: <TextSpan>[
-                              //                 TextSpan(
-                              //                     text: 'Pix Saque e Pix Troco',
-                              //                     style: TextStyle(
-                              //                         fontSize: 12,
-                              //                         color: Colors.grey[800])),
-                              //               ])),
-                              //     ),
-                              //   ),
-                              //),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Expanded(
+                                        child: Column(children: <Widget>[
+                                      Container(
+                                        width: circleRadius,
+                                        height: circleRadius,
+                                        decoration: const ShapeDecoration(
+                                            shape: CircleBorder(),
+                                            color: Colors.white),
+                                        child: const Padding(
+                                          padding:
+                                              EdgeInsets.all(circleBorderWidth),
+                                          child: DecoratedBox(
+                                            decoration: ShapeDecoration(
+                                              shape: CircleBorder(),
+                                              image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage(
+                                                  'https://avatars.githubusercontent.com/u/17891980?v=4',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const Text('Wendreo Fernandes',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      Text('Software Developer',
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.grey[600])),
+                                      const SizedBox(height: 10),
+                                      // ElevatedButton(
+                                      //   onPressed: () {
+                                      //     debugPrint('ElevatedButton Clicked');
+                                      //   },
+                                      //   style: ElevatedButton.styleFrom(
+                                      //     backgroundColor: Colors.purple,
+                                      //     shape: RoundedRectangleBorder(
+                                      //       borderRadius:
+                                      //           BorderRadius.circular(10),
+                                      //     ),
+                                      //   ),
+                                      //   child: const Text(
+                                      //       'Visit my Github profile'),
+                                      // ),
+                                      const SizedBox(height: 10),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 12, right: 12, bottom: 12),
+                                        child: Text(
+                                          "I'm a software developer with +6 years of experience building software.\n\n"
+                                          "Expertise with:\n"
+                                          "• DevOps: Fastlane, Pipeline CI/CD, Docker, Portainer, GitHub Actions, GitLab CI, Git Hooks and deployment;\n"
+                                          "• Code Quality: Testing, SonarQube and CodeCov;\n"
+                                          "• Techs: Git, Flutter, SQL, C# (.NET Core/.NET 6.0, Web API and Worker Service) and VB.NET (.NET Framework and Windows Forms) and Scrum;\n"
+                                          "• Databases: SQL Server, Firebird, MySQL, SQLite and others.",
+                                          style: TextStyle(
+                                              fontSize: 13.5,
+                                              color: Colors.grey[600]),
+                                          textAlign: TextAlign.justify,
+                                        ),
+                                      ),
+                                      Text(
+                                          '#csharp #dotnet #flutter #devops #cicd',
+                                          style: TextStyle(
+                                              fontSize: 13.5,
+                                              color: Colors.grey[500])),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          IconButton(
+                                              icon: const FaIcon(
+                                                  FontAwesomeIcons.instagram),
+                                              onPressed: () {
+                                                launchURL(
+                                                    "https://www.instagram.com/wendreof/");
+                                              }),
+                                          IconButton(
+                                              icon: const FaIcon(
+                                                  FontAwesomeIcons.linkedinIn),
+                                              onPressed: () {
+                                                launchURL(
+                                                    "https://www.linkedin.com/in/wendreof/");
+                                              }),
+                                          IconButton(
+                                              icon: const FaIcon(
+                                                  FontAwesomeIcons.github),
+                                              onPressed: () {
+                                                launchURL(
+                                                    "https://github.com/wendreof");
+                                              }),
+                                        ],
+                                      )
+                                    ])),
+                                  ])
                             ],
                           ),
-                        ])),
+                        ],
+                      ),
+                    ),
                     SingleChildScrollView(
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
-                            children: const <Widget>[
-                          Text("2 hahaha"),
+                            children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [],
+                          ),
                         ])),
                     SingleChildScrollView(
                         child: Column(
@@ -186,30 +232,6 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
           );
         }),
       ),
-      // bottomNavigationBar: Padding(
-      //   padding: EdgeInsets.only(
-      //       left: sizeConfig.dynamicScaleSize(size: 40),
-      //       right: sizeConfig.dynamicScaleSize(size: 40),
-      //       bottom: sizeConfig.dynamicScaleSize(size: 20)),
-      //   child: RaisedButton(
-      //     elevation: sizeConfig.dynamicScaleSize(size: 5.0),
-      //     shape: RoundedRectangleBorder(
-      //       borderRadius: BorderRadius.circular(30.0),
-      //     ),
-      //     color: Theme.of(context).primaryColor,
-      //     onPressed: () async {
-      //       Modular.to.pushNamed('/chave');
-      //     },
-      //     child: Text(
-      //       'Entendi',
-      //       style: TextStyle(
-      //         color: Colors.white,
-      //         fontSize: sizeConfig.dynamicScaleSize(size: 14),
-      //         fontWeight: FontWeight.bold,
-      //       ),
-      //     ),
-      //   ),
-      // )
     );
   }
 }

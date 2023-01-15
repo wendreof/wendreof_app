@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:wendreof_app/app/modules/splash/splash_store.dart';
 
 class SplashPage extends StatefulWidget {
   final String title;
@@ -9,16 +10,19 @@ class SplashPage extends StatefulWidget {
   SplashPageState createState() => SplashPageState();
 }
 
-class SplashPageState extends State<SplashPage>
-    with SingleTickerProviderStateMixin {
+class SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
+
+    controller.checkConnection();
 
     Future.delayed(const Duration(seconds: 5), () {
       Modular.to.navigate('/home');
     });
   }
+
+  final controller = SplashStore();
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +40,14 @@ class SplashPageState extends State<SplashPage>
             height: 20,
           ),
           if (mounted) ...{
-            SpinKitSquareCircle(
-              color: Colors.white,
-              size: 50.0,
-              controller: AnimationController(
-                  vsync: this, duration: const Duration(milliseconds: 1200)),
+            SpinKitFadingCircle(
+              itemBuilder: (BuildContext context, int index) {
+                return DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: index.isEven ? Colors.purple : Colors.blue,
+                  ),
+                );
+              },
             )
           }
         ],
