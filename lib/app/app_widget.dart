@@ -16,7 +16,7 @@ class AppWidget extends StatelessWidget {
       builder: (context, child) => ResponsiveWrapper.builder(child,
           maxWidth: 1200,
           minWidth: 480,
-          defaultScale: true,
+          defaultScale: false,
           breakpoints: [const ResponsiveBreakpoint.autoScale(600)],
           background: Container(color: const Color(0xFFF5F5F5))),
     ).modular();
